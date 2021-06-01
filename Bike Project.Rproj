@@ -1,13 +1,35 @@
-Version: 1.0
+install.packages('tidyverse')
+library(tidyverse)
+library(ggplot2)
+trip_data <- read.csv("C:/Users/ozbun/Desktop/Bike Share/trip_data.csv")
+glimpse(trip_data)
+head(trip_data)
 
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
+sapply(trip_data, class)
 
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
+trip_data$start_time <- as.Date(trip_data$started_at,format="%m/%d/%Y %H:%M")
+trip_data$end_time <- as.Date(trip_data$ended_at,format="%m/%d/%Y %H:%M")
+sapply(trip_data, class)
 
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
+
+trip_data$hours_start <- format(as.POSIXct(trip_data$start_time, "%m/%d/%Y %H:%M"), format = "%H:%M")
+trip_data$dates_start <- format(as.Date(trip_data$start_time,"%m/%d/%Y"), format = "%m/%d/%Y")
+
+head(trip_data)
+
+trip_data$hours_end <- format(as.POSIXct(trip_data$end_time, "%m/%d/%Y %H:%M"), format = "%H:%M")
+trip_data$dates_end <- format(as.Date(trip_data$end_time,"%m/%d/%Y"), format = "%m/%d/%Y")
+
+head(trip_data)
+
+trip_data %>% ggplot(aes(x=member_casual))+
+  geom_bar(aes(fill = member_casual))+
+  coord_flip()
+
+sum(is.na(trip_data))
+nrow(trip_data)
+
+na.omit(trip_data)
+nrow(trip_data)
+
+head(trip_data)
